@@ -1,0 +1,59 @@
+class Solution{
+  public:
+    // arr[]: Input Array
+    // N : Size of the Array arr[]
+    // Function to count inversions in the array.
+    long long count = 0;
+    
+    void merge(long long arr[], int l, long long mid, long long r){
+        long long n1 = mid+1-l, n2 = r-mid;
+        
+        long long a1[n1], a2[n2];
+        for(long long x=0; x<n1; ++x){
+            a1[x] = arr[l+x];
+        }
+        for(long long x=0; x<n2; ++x){
+            a2[x] = arr[mid+1+x];
+        }
+        int i=0, j=0, k=l;
+        while(i<n1 && j<n2){
+            if(a1[i]<=a2[j]){
+                arr[k]=a1[i];
+                k++;
+                i++;
+            }else{
+                arr[k]=a2[j];
+                k++;
+                j++;
+                count += n1-i;
+            }
+        }
+        while(i<n1){
+            arr[k++]=a1[i++];
+        }
+        while(j<n2){
+            arr[k++]=a2[j++];
+        }
+    }
+    
+    void mergesort(long long arr[], long long l, long long r){
+        
+        if(l<r){
+            long long mid = (l+r)/2;
+            mergesort(arr, l, mid);
+            mergesort(arr, mid+1, r);
+            merge(arr, l, mid, r);
+        }
+    }
+    
+    
+    
+    long long int inversionCount(long long arr[], long long N)
+    {
+        // Your Code Here
+        mergesort(arr, 0, N-1);
+        long long int result = count;
+        count = 0;
+        return result;
+        
+    }
